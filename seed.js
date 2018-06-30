@@ -16,6 +16,7 @@ if (config.user !== 'jodich') {
 
 const client = new pg.Client(config);
 
+// Inserting Pokemons into pokemon table
 jsonfile.readFile(FILE, (fileReadError, obj)=>{
 
 	if (fileReadError) {
@@ -35,11 +36,12 @@ jsonfile.readFile(FILE, (fileReadError, obj)=>{
 				console.log('Connected to database.');
 
 				let pokemons = obj.pokemon;
-				let text = 'INSERT INTO pokemon (name, num, img, weight, height) ' + ' VALUES($1, $2, $3, $4, $5) RETURNING *';
+				let text = 'INSERT INTO pokemon (name, num, img, weight, height, is_deleted) ' + ' VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
 				let values = null;
+				let isDeleted = 'false';
 
 				pokemons.forEach((pokemon) => {
-					values = [pokemon.name, pokemon.num, pokemon.img, pokemon.weight, pokemon.height];
+					values = [pokemon.name, pokemon.num, pokemon.img, pokemon.weight, pokemon.height, isDeleted];
 					
 					client.query(text, values, (dbQueryError, result) => {
 						if (dbQueryError) {

@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS pokemon (
 	img VARCHAR(255),
 	weight VARCHAR(255),
 	height VARCHAR(255),
-	is_deleted VARCHAR(255)
+	is_deleted VARCHAR(255),
+	user_id INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -13,3 +14,15 @@ CREATE TABLE IF NOT EXISTS users (
 	email VARCHAR(255),
 	password VARCHAR(255)
 );
+
+CREATE TABLE IF NOT EXISTS types (
+	id SERIAL PRIMARY KEY,
+	type VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS pokemon_types (
+	id SERIAL PRIMARY KEY,
+	pokemon_id VARCHAR(255),
+	type_id VARCHAR(255)
+);
+

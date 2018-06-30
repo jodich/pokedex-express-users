@@ -12,6 +12,7 @@ const express = require('express');
 const methodOverride = require('method-override');
 const pg = require('pg');
 var sha256 = require('js-sha256');
+const cookieParser = require('cookie-parser');
 
 // Initialise postgres client
 const config = {
@@ -42,6 +43,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(cookieParser());
 
 
 // Set react-views to be the default view engine
@@ -56,13 +58,20 @@ app.engine('jsx', reactEngine);
  * ===================================
  */
 
+
+ /*
+
+============== POKEMON STUFF ==============
+
+*/
+
 // app.get('/', getRoot);
 const getRoot = (request, response) => {
   // query database for all pokemon
 
   // respond with HTML page displaying all pokemon
   //
-  const queryString = "SELECT * from pokemon WHERE is_deleted='true';";
+  const queryString = "SELECT * from pokemon WHERE is_deleted='false' ORDER BY id ASC;";
   pool.query(queryString, (err, result) => {
     if (err) {
       console.error('Query error:', err.stack);
@@ -99,16 +108,22 @@ const getPokemon = (request, response) => {
 // app.post('/pokemon', postPokemon);
 const postPokemon = (request, response) => {
   let params = request.body;
+
+  params.weight += ' kg';
+  params.height += ' m';
+
+  let isDeleted = 'false';
+
+  let userId = request.cookies['user_id'];
   
-  const queryString = 'INSERT INTO pokemon(name, height) VALUES($1, $2);';
-  const values = [params.name, params.height];
+  const queryString = 'INSERT INTO pokemon(name, num, img, weight, height, is_deleted, user_id) VALUES($1, $2, $3, $4, $5, $6, $7);';
+  const values = [params.name, params.num, params.img, params.weight, params.height, isDeleted, userId];
 
   pool.query(queryString, values, (err, result) => {
     if (err) {
       console.log('query error:', err.stack);
     } else {
-      console.log('query result:', result);
-
+      // console.log('query result:', result);
       // redirect to home page
       response.redirect('/');
     }
@@ -222,7 +237,11 @@ app.put('/pokemon/:id', updatePokemon);
 
 app.delete('/pokemon/:id', deletePokemon);
 
-// TODO: New routes for creating users
+/*
+
+============== USER STUFF ==============
+
+*/
 
 const getUser = (request, response) => {
 
@@ -280,7 +299,7 @@ const postUserLogin = (request, response) => {
     // check if email exist if exist
     // check password matches, if password match
     // redirect to user profile page
-    
+
     if (err) {
       console.log('Query error:', err.stack);
     
@@ -310,14 +329,36 @@ const postUserLogin = (request, response) => {
 
 }
 
+const getUserLogout = (request, response) => {
 
+  response.render('Logout')
+
+}
+
+const deleteUserLogin = (request, response) => {
+
+  response.clearCookie('logged_in')
+  response.clearCookie('user_id')
+
+  response.redirect('/');
+
+}
+
+/**
+ * ===================================
+ * Routes
+ * ===================================
+ */
 
 app.get('/user', getUser)
 app.get('/user/new', getNewUser)
 app.get('/user/login', getUserLogin)
+app.get('/user/logout', getUserLogout)
 
 app.post('/user', postUser)
 app.post('/user/login', postUserLogin)
+
+app.delete('/user/logout', deleteUserLogin)
 
 
 
