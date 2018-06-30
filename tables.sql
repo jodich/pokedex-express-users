@@ -15,14 +15,9 @@ CREATE TABLE IF NOT EXISTS users (
 	password VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS types (
-	id SERIAL PRIMARY KEY,
-	type VARCHAR(255)
-);
 
-CREATE TABLE IF NOT EXISTS pokemon_types (
+CREATE TABLE IF NOT EXISTS users_pokemon (
 	id SERIAL PRIMARY KEY,
-	pokemon_id VARCHAR(255),
-	type_id VARCHAR(255)
+	user_id INTEGER,
+	pokemon_id INTEGER
 );
-

@@ -1,0 +1,5 @@
+-- INSERT INTO users_pokemon (user_id, pokemon_id) VALUES (1, 4);
+-- INSERT INTO users_pokemon (user_id, pokemon_id) VALUES (1, 57);
+-- INSERT INTO users_pokemon (user_id, pokemon_id) VALUES (1, 151);
+-- INSERT INTO users_pokemon (user_id, pokemon_id) VALUES (1, 88);
+-- INSERT INTO users_pokemon (user_id, pokemon_id) VALUES (1, 133);

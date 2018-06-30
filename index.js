@@ -67,20 +67,43 @@ app.engine('jsx', reactEngine);
 
 // app.get('/', getRoot);
 const getRoot = (request, response) => {
-  // query database for all pokemon
 
-  // respond with HTML page displaying all pokemon
-  //
-  const queryString = "SELECT * from pokemon WHERE is_deleted='false' ORDER BY id ASC;";
+  console.log(request.cookies['logged_in'])
+
+  let queryString = '';
+  let queryString2 = '';
+
+  if (request.cookies['user_id'] == undefined) {
+
+    // if not logged in, see all pokemon
+    queryString = "SELECT * FROM pokemon WHERE is_deleted='false' AND user_id = 0 ORDER BY id ASC";
+
+  } else {
+
+    // if logged in, see user created pokemon only
+    // option: can see all pokemons and user created pokemon by adding user_id=0
+    // but cannot remove user_id =" + userId as it will show all pokemons including pokemons not created by that user
+    let userId = request.cookies['user_id'];
+        
+    // selects pokemon that user owns
+    queryString = "SELECT pokemon.* FROM users INNER JOIN users_pokemon ON (users_pokemon.user_id = users.id) \
+                                               INNER JOIN pokemon ON (users_pokemon.pokemon_id = pokemon.id)\
+                                               WHERE users_pokemon.user_id =" + userId;
+  
+  }
+
+
+  // send query
   pool.query(queryString, (err, result) => {
+
     if (err) {
       console.error('Query error:', err.stack);
     } else {
-      console.log('Query result:', result);
 
       // redirect to home page
       response.render( 'home', {pokemon: result.rows} );
     }
+
   });
 }
 
@@ -115,19 +138,37 @@ const postPokemon = (request, response) => {
   let isDeleted = 'false';
 
   let userId = request.cookies['user_id'];
-  
-  const queryString = 'INSERT INTO pokemon(name, num, img, weight, height, is_deleted, user_id) VALUES($1, $2, $3, $4, $5, $6, $7);';
-  const values = [params.name, params.num, params.img, params.weight, params.height, isDeleted, userId];
 
-  pool.query(queryString, values, (err, result) => {
-    if (err) {
-      console.log('query error:', err.stack);
-    } else {
-      // console.log('query result:', result);
-      // redirect to home page
-      response.redirect('/');
-    }
-  });
+  if (userId == undefined) {
+    response.send('Create account first!')
+
+  } else {
+
+    // insert into pokemon list
+    const queryString = 'INSERT INTO pokemon(name, num, img, weight, height, is_deleted, user_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id;';
+    const values = [params.name, params.num, params.img, params.weight, params.height, isDeleted, userId];
+
+    pool.query(queryString, values, (err, result) => {
+      if (err) {
+        console.log('query error:', err.stack);
+      } else {
+        // console.log('query result:', result);
+        // redirect to home page
+
+        // insert user.id and pokemon.id into users_pokemon
+        const queryString2 = 'INSERT INTO users_pokemon (user_id, pokemon_id) VALUES ($1, $2)'
+        const values2 = [userId, result.rows[0].id];
+
+        pool.query(queryString2, values2, (err, result2) => {
+
+          response.redirect('/');
+        })
+
+      }
+    });
+
+  }
+  
 };
 
 // app.get('/pokemon/:id/edit', editPokemonForm);

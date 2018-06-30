@@ -36,12 +36,13 @@ jsonfile.readFile(FILE, (fileReadError, obj)=>{
 				console.log('Connected to database.');
 
 				let pokemons = obj.pokemon;
-				let text = 'INSERT INTO pokemon (name, num, img, weight, height, is_deleted) ' + ' VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+				let text = 'INSERT INTO pokemon (name, num, img, weight, height, is_deleted, user_id) ' + ' VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
 				let values = null;
 				let isDeleted = 'false';
+				let userId = 0;
 
 				pokemons.forEach((pokemon) => {
-					values = [pokemon.name, pokemon.num, pokemon.img, pokemon.weight, pokemon.height, isDeleted];
+					values = [pokemon.name, pokemon.num, pokemon.img, pokemon.weight, pokemon.height, isDeleted, userId];
 					
 					client.query(text, values, (dbQueryError, result) => {
 						if (dbQueryError) {
