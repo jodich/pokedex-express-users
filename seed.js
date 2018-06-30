@@ -4,13 +4,13 @@ const FILE = 'pokedex.json';
 // REMEMBER TO CHANGE YOUR CONFIGS BEFORE RUNNING THIS SCRIPT!!
 const pg = require('pg');
 const config = {
-	user: 'ck',
+	user: 'jodich',
 	host: '127.0.0.1',
 	database: 'pokemons',
 	port: '5432'
 };
 
-if (config.user === 'ck') {
+if (config.user !== 'jodich') {
 	throw new Error("====== UPDATE YOUR DATABASE CONFIGURATION =======");
 };
 
