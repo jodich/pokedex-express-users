@@ -396,9 +396,14 @@ const postUserLogin = (request, response) => {
 
 }
 
-// const getUserLogout = (request, response) => {
-//   response.render('Logout')
-// }
+// used for <a> tag in Navigation
+const getUserLogout = (request, response) => {
+  response.clearCookie('logged_in')
+  response.clearCookie('user_id')
+
+  response.redirect('/');
+}
+
 
 const deleteUserLogin = (request, response) => {
 
@@ -418,7 +423,7 @@ const deleteUserLogin = (request, response) => {
 app.get('/user', getUser)
 app.get('/user/new', getNewUser)
 app.get('/user/login', getUserLogin)
-// app.get('/user/logout', getUserLogout)
+app.get('/user/logout', getUserLogout)
 
 app.post('/user', postUser)
 app.post('/user/login', postUserLogin)

@@ -1,6 +1,5 @@
 var React = require("react");
 var LayoutContainer = require("./LayoutContainer.jsx");
-var Navigation = require("./Navigation.jsx");
 
 
 class UserPoke extends React.Component {
@@ -29,9 +28,7 @@ class UserPoke extends React.Component {
 
     return (
       <LayoutContainer>
-        <Navigation>
-        </Navigation>
-        <h1>Welcome to Jodi's Pokedex</h1>
+        <div className="welcome"><h1>Welcome to Jodi's Pokedex</h1></div>
           <div className="all_thumbnail">
             {pokemonsList}
           </div>

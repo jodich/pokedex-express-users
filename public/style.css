@@ -56,22 +56,29 @@ img {
 	margin: 10px;
 }
 
-
+.welcome {
+	clear: both;
+}
 
 
 
 
 /*nav bar*/
 .navigation {
-	width: 95%;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	width: 90%;
 	margin: 0 auto;
-	margin-bottom: 30px;
+	margin-bottom: 40px;
+	text-align: center;
+	/*background-color: #41CBDB;*/
+	border-bottom: 1px solid #41CBDB;
 }
 
-/*making the 2 buttons float right*/
 .navigation div {
 	display: inline-block;
-	float: right;
+	padding: 10px;
 }
 
 /*button box*/
@@ -85,9 +92,8 @@ img {
 	background-color: rgba(255,255,255,0);
 	border: none;
 	padding: 10px;
-}
-
-#newPoke_btn {
+	color: #33A9B6;
+	font-size: 12px;
 }
 
 .thumbnail_btn {
@@ -100,14 +106,13 @@ img {
 	color: grey;
 }
 
-.link_nav {
+/*.link_nav {
 	text-decoration: none;
 	color: black;
 	font-size: 11px;
 	padding: 10px;
-}
-
-
+	margin: 20px 20px;
+}*/
 
 
 
@@ -151,6 +156,8 @@ img {
 
 
 
+
+
 .del {
 	border: 1px solid #C0C0C0;
 	border-radius: 5px;
@@ -158,15 +165,11 @@ img {
 }
 
 
-
-
-
 .pokemon-list {
 	/*background-color: red;*/
 	text-align: center;
 	margin: 50px;
 }
-
 
 .pokemon-list .pokemon-attribute {
 	width: 50%;

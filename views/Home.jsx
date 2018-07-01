@@ -1,6 +1,5 @@
 var React = require("react");
 var LayoutContainer = require("./LayoutContainer.jsx");
-var Navigation = require("./Navigation.jsx");
 
 
 class Home extends React.Component {
@@ -29,12 +28,10 @@ class Home extends React.Component {
 
     return (
       <LayoutContainer>
-        <Navigation>
-        </Navigation>
-        <h1>Welcome to Jodi's Pokedex</h1>
-          <div className="all_thumbnail">
-            {pokemonsList}
-          </div>
+        <div class="welcome"><h1>Welcome to Jodi's Pokedex</h1></div>
+        <div className="all_thumbnail">
+          {pokemonsList}
+        </div>
       </LayoutContainer>
     );
   }

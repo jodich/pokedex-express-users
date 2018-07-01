@@ -1,4 +1,5 @@
 var React = require("react");
+var Navigation = require("./Navigation.jsx");
 
 class LayoutContainer extends React.Component {
   render() {
@@ -11,7 +12,9 @@ class LayoutContainer extends React.Component {
         </head>
         <body>
           <div className="main">
-          {this.props.children}
+            <Navigation>
+            </Navigation>
+            {this.props.children}
 
           </div>
         </body>
