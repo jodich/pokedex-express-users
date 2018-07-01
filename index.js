@@ -74,24 +74,11 @@ const getRoot = (request, response) => {
 
     queryString = "SELECT * FROM pokemon WHERE is_deleted='false' AND user_id = 0 ORDER BY name ASC";
   
-  } else if (request.cookies['user_id'] == undefined) {
-
-    // if not logged in, see all pokemon
-    queryString = "SELECT * FROM pokemon WHERE is_deleted='false' AND user_id = 0 ORDER BY id ASC";
-
   } else {
 
-    // if logged in, see user created pokemon only
-    // option: can see all pokemons and user created pokemon by adding user_id=0
-    // cannot remove user_id =" + userId as it will show all pokemons including pokemons not created by that user
-    let userId = request.cookies['user_id'];
-        
-    // selects pokemon that user owns
-    queryString = "SELECT pokemon.* FROM users INNER JOIN users_pokemon ON (users_pokemon.user_id = users.id) \
-    INNER JOIN pokemon ON (users_pokemon.pokemon_id = pokemon.id)\
-    WHERE users_pokemon.user_id =" + userId + " ORDER BY id";
-  
-  }
+    queryString = "SELECT * FROM pokemon WHERE is_deleted='false' AND user_id = 0 ORDER BY id ASC";
+
+  } 
 
   // send query
   pool.query(queryString, (err, result) => {
@@ -128,8 +115,8 @@ const getPokemon = (request, response) => {
   });
 }
 
-// app.post('/pokemon', postPokemon);
-const postPokemon = (request, response) => {
+// app.post('/pokemon', postNewPokemon);
+const postNewPokemon = (request, response) => {
   let params = request.body;
 
   params.weight += ' kg';
@@ -140,7 +127,7 @@ const postPokemon = (request, response) => {
   let userId = request.cookies['user_id'];
 
   if (userId == undefined) {
-    response.send('Create account first!')
+    response.send('create account or login first!')
 
   } else {
 
@@ -256,9 +243,30 @@ const deletePokemon = (request, response) => {
     }
 
   })
-
-
 }
+
+
+const postPokemon = (request, response) => {
+
+  let pokeId = request.params['id'];
+  let userId = request.cookies['user_id'];
+
+  if (userId == undefined) {
+    response.send('create account or login first!')
+
+  } else {
+
+    const queryString = "INSERT INTO users_pokemon(user_id, pokemon_id) VALUES ($1, $2)";
+    const values = [userId, pokeId];
+
+    pool.query(queryString, values, (err, result) => {
+
+      response.redirect('/');
+    })
+  }
+}
+
+
 /**
  * ===================================
  * Routes
@@ -272,7 +280,8 @@ app.get('/pokemon/new', getNew);
 app.get('/pokemon/:id', getPokemon);
 app.get('/pokemon/:id/delete', deletePokemonForm);
 
-app.post('/pokemon', postPokemon);
+app.post('/pokemon', postNewPokemon);
+app.post('/pokemon/:id', postPokemon);
 
 app.put('/pokemon/:id', updatePokemon);
 
@@ -286,7 +295,24 @@ app.delete('/pokemon/:id', deletePokemon);
 
 const getUser = (request, response) => {
 
-  response.send('profile page?')
+  let userId = request.cookies['user_id'];
+
+  if (userId === undefined) {
+    response.send('create account or login first!')
+
+  } else {
+
+    const queryString = "SELECT pokemon.* FROM users INNER JOIN users_pokemon ON (users_pokemon.user_id = users.id) \
+       INNER JOIN pokemon ON (users_pokemon.pokemon_id = pokemon.id)\
+       WHERE users_pokemon.user_id =" + userId + " ORDER BY id";
+
+    pool.query(queryString, (err, result) => {
+
+      response.render('UserPoke', {pokemon: result.rows})
+
+    })
+
+  }
 }
 
 const getNewUser = (request, response) => {

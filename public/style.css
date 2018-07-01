@@ -4,6 +4,10 @@ body {
 	font-family: 'Work Sans', sans-serif;
 }
 
+a {
+	cursor: default;
+}
+
 .main {
 	padding: 30px;
 	width: 70%;
@@ -96,6 +100,12 @@ img {
 	color: grey;
 }
 
+.link_nav {
+	text-decoration: none;
+	color: black;
+	font-size: 11px;
+	padding: 10px;
+}
 
 
 

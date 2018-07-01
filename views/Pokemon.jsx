@@ -38,6 +38,10 @@ class Pokemon extends React.Component {
               <div className="pokemon-attribute">
                 spawn_time: {this.props.pokemon.spawn_time}
               </div>
+
+              <form className="pokemon-form" method="POST" action={"/pokemon/"+ this.props.pokemon.id}>
+                <input className="btn_input_style del" type="submit" value="Catch It!" />
+              </form>
         </div>
       </LayoutContainer>
     );

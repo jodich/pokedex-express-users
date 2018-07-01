@@ -39,10 +39,14 @@ class Navigation extends React.Component {
 
     return (
       <div className="navigation">
-        {newPoke} {sortBy} <div>{login} {logout}{newUser}</div>
+        <a className="link_nav" href="/">Home</a>
+        {newPoke}
+        {sortBy}
+        <a className="link_nav" href="/user">My Pokemon</a>
+        <div>{login} {logout}{newUser}</div>
       </div>
 
-
+// basically.... <a href='/'> and <form method="GET" action"/> is the same thing?
 
 
 
