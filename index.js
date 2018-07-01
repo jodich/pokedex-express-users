@@ -44,7 +44,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
-
+app.use(express.static('public'));
 
 // Set react-views to be the default view engine
 const reactEngine = require('express-react-views').createEngine();
@@ -68,12 +68,13 @@ app.engine('jsx', reactEngine);
 // app.get('/', getRoot);
 const getRoot = (request, response) => {
 
-  console.log(request.cookies['logged_in'])
-
   let queryString = '';
-  let queryString2 = '';
 
-  if (request.cookies['user_id'] == undefined) {
+  if (request.query.sortby == "name") {
+
+    queryString = "SELECT * FROM pokemon WHERE is_deleted='false' AND user_id = 0 ORDER BY name ASC";
+  
+  } else if (request.cookies['user_id'] == undefined) {
 
     // if not logged in, see all pokemon
     queryString = "SELECT * FROM pokemon WHERE is_deleted='false' AND user_id = 0 ORDER BY id ASC";
@@ -82,16 +83,15 @@ const getRoot = (request, response) => {
 
     // if logged in, see user created pokemon only
     // option: can see all pokemons and user created pokemon by adding user_id=0
-    // but cannot remove user_id =" + userId as it will show all pokemons including pokemons not created by that user
+    // cannot remove user_id =" + userId as it will show all pokemons including pokemons not created by that user
     let userId = request.cookies['user_id'];
         
     // selects pokemon that user owns
     queryString = "SELECT pokemon.* FROM users INNER JOIN users_pokemon ON (users_pokemon.user_id = users.id) \
-                                               INNER JOIN pokemon ON (users_pokemon.pokemon_id = pokemon.id)\
-                                               WHERE users_pokemon.user_id =" + userId;
+    INNER JOIN pokemon ON (users_pokemon.pokemon_id = pokemon.id)\
+    WHERE users_pokemon.user_id =" + userId + " ORDER BY id";
   
   }
-
 
   // send query
   pool.query(queryString, (err, result) => {
@@ -240,7 +240,7 @@ const deletePokemon = (request, response) => {
 
   let id = request.params['id'];
 
-  const queryString = "UPDATE pokemon SET is_deleted='false' WHERE id= $1";
+  const queryString = "UPDATE pokemon SET is_deleted='true' WHERE id= $1";
   const values = [id];
 
   console.log(queryString);
@@ -370,11 +370,9 @@ const postUserLogin = (request, response) => {
 
 }
 
-const getUserLogout = (request, response) => {
-
-  response.render('Logout')
-
-}
+// const getUserLogout = (request, response) => {
+//   response.render('Logout')
+// }
 
 const deleteUserLogin = (request, response) => {
 
@@ -394,31 +392,12 @@ const deleteUserLogin = (request, response) => {
 app.get('/user', getUser)
 app.get('/user/new', getNewUser)
 app.get('/user/login', getUserLogin)
-app.get('/user/logout', getUserLogout)
+// app.get('/user/logout', getUserLogout)
 
 app.post('/user', postUser)
 app.post('/user/login', postUserLogin)
 
 app.delete('/user/logout', deleteUserLogin)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

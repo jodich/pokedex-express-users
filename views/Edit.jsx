@@ -1,94 +1,122 @@
 var React = require("react");
+var LayoutContainer = require("./LayoutContainer.jsx");
 
 class Edit extends React.Component {
   render() {
     return (
-      <html>
-        <head />
-        <body>
-          <h4>Editing: {this.props.pokemon.name}</h4>
-          <form
-            className="pokemon-form"
-            method="POST"
-            action={"/pokemon/"+ this.props.pokemon.id + "?_method=PUT"}
-          >
+      <LayoutContainer>
+        <h3>Editing: {this.props.pokemon.name}</h3>
+        <div className="all_forms edit">
+        <img src={this.props.pokemon.img}/>
+        <form
+          className="pokemon-form form_page"
+          method="POST"
+          action={"/pokemon/"+ this.props.pokemon.id + "?_method=PUT"}
+        >
+    <div>
+          <div className="pokemon-attribute">
+            <input
+              name="num"
+              type="text"
+              placeholder="num"
+              defaultValue={this.props.pokemon.num}
+              className="input_style"
+            />
+          </div>
+          <div className="pokemon-attribute">
+            <input
+              name="name"
+              type="text"
+              placeholder="name"
+              defaultValue={this.props.pokemon.name}
+              className="input_style"
+            />
+          </div>
+    </div>
+    <div>
+          <div className="pokemon-attribute">
+            <input
+              name="img"
+              type="text"
+              placeholder="image"
+              defaultValue={this.props.pokemon.img}
+              className="input_style"
+            />
+          </div>
             <div className="pokemon-attribute">
-              id:<input name="id" type="text" defaultValue={this.props.pokemon.id} />
-            </div>
-            <div className="pokemon-attribute">
-              num:<input
-                name="num"
-                type="text"
-                defaultValue={this.props.pokemon.num}
-              />
-            </div>
-            <div className="pokemon-attribute">
-              name:<input
-                name="name"
-                type="text"
-                defaultValue={this.props.pokemon.name}
-              />
-            </div>
-            <div className="pokemon-attribute">
-              img:<input
-                name="img"
-                type="text"
-                defaultValue={this.props.pokemon.img}
-              />
-            </div>
-            <div className="pokemon-attribute">
-              height:<input
+              <input
                 name="height"
                 type="text"
+                placeholder="height"
                 defaultValue={this.props.pokemon.height}
+                className="input_style"
               />
             </div>
+    </div>
+    <div>
             <div className="pokemon-attribute">
-              weight:<input
+              <input
                 name="weight"
                 type="text"
+                placeholder="weight"
                 defaultValue={this.props.pokemon.weight}
+                className="input_style"
               />
             </div>
             <div className="pokemon-attribute">
-              candy:<input
+              <input
                 name="candy"
                 type="text"
+                placeholder="candy"
                 defaultValue={this.props.pokemon.candy}
+                className="input_style"
               />
             </div>
-            <div className="pokemon-attribute">
-              candy_count:<input
-                name="candy_count"
-                type="text"
-                defaultValue={this.props.pokemon.candy_count}
-              />
-            </div>
-            <div className="pokemon-attribute">
-              egg:<input
-                name="egg"
-                type="text"
-                defaultValue={this.props.pokemon.egg}
-              />
-            </div>
-            <div className="pokemon-attribute">
-              avg_spawns:<input
-                name="avg_spawns"
-                type="text"
-                defaultValue={this.props.pokemon.avg_spawns}
-              />
-            </div>
-            <div className="pokemon-attribute">
-              spawn_time:<input
-                name="spawn_time"
-                type="text"
-                defaultValue={this.props.pokemon.spawn_time}
-              />
-            </div>
-            <input name="submit" type="submit" />
-          </form>
-        </body>
-      </html>
+    </div>
+    <div>
+          <div className="pokemon-attribute">
+            <input
+              name="candy_count"
+              type="text"
+              placeholder="candy count"
+              defaultValue={this.props.pokemon.candy_count}
+              className="input_style"
+            />
+          </div>
+          <div className="pokemon-attribute">
+            <input
+              name="egg"
+              type="text"
+              placeholder="egg"
+              defaultValue={this.props.pokemon.egg}
+              className="input_style"
+            />
+          </div>
+    </div>
+    <div>
+          <div className="pokemon-attribute">
+            <input
+              name="avg_spawns"
+              type="text"
+              placeholder="average spawn"
+              defaultValue={this.props.pokemon.avg_spawns}
+              className="input_style"
+            />
+          </div>
+          <div className="pokemon-attribute">
+            <input
+              name="spawn_time"
+              type="text"
+              placeholder="spawn time"
+              defaultValue={this.props.pokemon.spawn_time}
+              className="input_style"
+            />
+          </div>
+    </div>
+          <input className="btn_input_style" name="submit" type="submit" />
+        </form>
+        </div>
+      </LayoutContainer>
     );
   }
 }

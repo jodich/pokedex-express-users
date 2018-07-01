@@ -1,23 +1,22 @@
 var React = require("react");
+var LayoutContainer = require("./LayoutContainer.jsx");
+
 
 class Login extends React.Component {
   render() {
     return (
-      <html>
-        <head />
-        <body>
-          <form method="POST" action="/user/login">
-          LOGIN
+      <LayoutContainer>
+        <h2>LOGIN</h2>
+        <div className="all_forms">
+          <form className="form_page" method="POST" action="/user/login">
             <div>
-              email:<input name="email" type="text" />
+              <input className="input_style" name="email" type="text" placeholder="email" />
+              <input className="input_style" name="password" type="text" placeholder="password"/>
             </div>
-            <div>
-              password:<input name="password" type="text" />
-            </div>
-            <input type="submit" value="Submit" />
+            <input className="btn_input_style" type="submit" value="Submit" />
           </form>
-        </body>
-      </html>
+        </div>
+      </LayoutContainer>
     );
   }
 }
